@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content = "height = device-height, width = 420, user-scalable = no" /> 
+	<link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+	<title>heftruck</title>
+	<style type="text/css">
+		p {font-size: x-large}
+		button {
+			display: block;margin: 5px 5px 5px 5px;width: 300px;height: 100px;
+			font-size: 32pt;font-weight: bold;color: yellow;}	
+	</style>
+</head>
+
+<body>
+	<header>
+		<p STYLE="color: green;"><b>Thomas More heftruck !</b></p>
+	</header>
+	<form method="GET">
+		<br><br><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&ensp;
+		<input class="btn btn-success btn-lg" id="voor" value="voor" type="button">
+		&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+		<input class="btn btn-warning btn-lg" id="op" value="op" type="button"><br><br>
+		&emsp;
+		<input class="btn btn-info btn-lg" id="links" value="links" type="button">&emsp;
+		<input class="btn btn-danger btn-lg" id="stop" value="stop" type="button">&emsp;
+		<input class="btn btn-info btn-lg" id="rechts" value="rechts" type="button"><br><br>
+		&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;
+		<input class="btn btn-success btn-lg" id="achter" value="achter" type="button">
+		&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+		<input class="btn btn-success btn-lg" id="neer" value="neer" type="button"><br><br><br>
+		<img src="Heftruck.jpg" width="300" height="200" />
+
+
+	</form>
+	<!-- including the latest PubNub JavaScript SDK -->
+	<script src="//cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>
+	(function() {
+
+		// This is the channel name you choose in python
+		var channel = 'knop';
+		// Init
+		var p = PUBNUB.init({
+			subscribe_key: 'sub-c-0ebf3c70-c03d-11e5-8a35-0619f8945a4f',
+			publish_key:   'pub-c-9e2fd6cb-ef65-42c7-9707-87f997023175'
+		});
+		// Sending data
+		$('#voor').on('touchstart', function ledon(){p.publish({
+				channel : channel, 
+				message : {knop: 1}
+			});})
+		$('#voor').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})
+		$('#achter').on('touchstart', function ledon(){p.publish({
+				channel : channel, 
+				message : {knop: 2}
+			});})
+		$('#achter').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})
+		$('#links').on('touchstart', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 3}
+			});})
+		$('#links').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})
+		$('#rechts').on('touchstart', function ledon(){p.publish({
+				channel : channel, 
+				message : {knop: 4}
+			});})
+		$('#rechts').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})
+		$('#op').on('touchstart', function ledon(){p.publish({
+				channel : channel, 
+				message : {knop: 5}
+			});})
+		$('#op').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})
+		$('#neer').on('touchstart', function ledon(){p.publish({
+				channel : channel, 
+				message : {knop: 6}
+			});})
+		$('#neer').on('touchend', function ledoff(){p.publish({
+				channel : channel, 
+				message : {knop: 0}
+			});})			
+		p.subscribe({
+                channel: 'knop',
+                message: function(m){
+                    console.log(m);
+
+                }
+            });
+            p.history({
+                channel: 'knop',
+                callback: function(m){
+                    console.log(JSON.stringify(m))
+                },
+                count: 5, // 100 is the default
+                reverse: false // false is the default
+            });
+    
+    })();
+   $(function(){
+     
+   });
+   
+	</script>
+	
+</body>
+</html>
